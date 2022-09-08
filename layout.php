@@ -6,6 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-alpha3/css/bootstrap.min.css' integrity='sha512-fjZwDJx4Wj5hoFYRWNETDlD7zty6PA+dUfdRYxe463OBATFHyx7jYs2mUK9BZ2WfHQAoOvKl6oYPCZHd1+t7Qw==' crossorigin='anonymous' />
+    <script src="https://kit.fontawesome.com/91e8147110.js" crossorigin="anonymous"></script>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
     <title>Mister Cocktail in progress</title>
 </head>
 
@@ -53,6 +59,14 @@
         <!--
             Affichage des infos user s'il est connecté
         -->
+        <?php if (Session::hasFlashMsg()) : ?>
+            <div class="alert alert-success"><?= Session::getFlashMsg() ?></div>
+        <?php elseif (Session::hasError()) : ?>
+            <div class="alert alert-danger"><?= Session::getError() ?></div>
+        <?php endif; ?>
+
+        <?php Session::resetMsg() ?>
+
         <?php if (isset($template)) : ?>
             <?php include 'templates/' . $template . '.php' ?>
         <?php endif; ?>
@@ -61,6 +75,7 @@
     <footer>
 
     </footer>
+    <script type='module' src="templates/www/js/app.js"></script>
 </body>
 
 </html>

@@ -32,9 +32,10 @@ class AuthController extends AbstractController implements AuthInterface
                 if (!$user = $this->userM->findByEmail($email)) throw new LogicException("L'utilisateur n'existe pas");
                 // try to save it
                 // Need Authenticator Interface
-                if ($this->auth($user, $password)) {
+                if ($this->auth($userM, $password)) {
                     // Init session
                     Session::init((int) $user['id'], $user['name'], $user['email'], (int) $user['role_id']);
+                    Session::addFlashMsg('Connexion réussie');
                     // Redirect to home to login
                     header('Location: index.php');
                     exit;
@@ -70,6 +71,8 @@ class AuthController extends AbstractController implements AuthInterface
                     ->setRole();
                 // try to save it
                 if ($this->userM->insert()) {
+                    // Notif
+                    Session::addFlashMsg('Inscription réussie');
                     // Redirect to home to login
                     header('Location: index.php?page=login');
                     exit;
@@ -80,13 +83,15 @@ class AuthController extends AbstractController implements AuthInterface
         }
 
         // Display form
-        $this->redirectTo('signin', ['error' => $error]);
+        $this->redirectTo('signin', ['error' => $error ?? null]);
     }
 
     public function logout(int $user_id): void
     {
         // Disconnect user
         Session::destroy();
+        //Notif
+        Session::addFlashMsg('Déconnexion réussie');
         $this->redirectTo('home');
     }
 

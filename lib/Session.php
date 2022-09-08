@@ -50,43 +50,46 @@ class Session
         return self::isConnected() && $_SESSION['auth']['isAdmin'] ?? false;
     }
 
-    public static function getLogged()
+    public static function getUser()
     {
         // il faut utiliser 'self' ou le nom de la classe elle-même, ici 'Session' devant l'opérateur
         return self::isConnected() ? $_SESSION['auth'] : false;
     }
 
-    public static function setError(string $error = null): void
+    public static function hasError(): bool
+    {
+        return !empty($_SESSION['error']) ? true : false;
+    }
+
+    public static function addError(string $error): void
     {
         $_SESSION['error'] = $error;
     }
 
     public static function getError(): ?string
     {
-        return isset($_SESSION['error']) ? $_SESSION['error'] : null;
+        return self::hasError() ? $_SESSION['error'] : null;
     }
 
     // Gestion notifs
-    /**
-     * Add notif
-     * ex : ['error' => 'une problème est survenu']
-     * ex : ['success' => 'tout s'est bien passé']
-     *
-     * @param array $msg
-     * @return void
-     */
-    public static function addFlashMsg(array $msg): void
+    public static function hasFlashMsg(): bool
+    {
+        return !empty($_SESSION['notif']) ? true : false;
+    }
+
+    public static function addFlashMsg(string $msg): void
     {
         $_SESSION['notif'] = $msg;
     }
 
-    public static function getFlashMsg(): ?array
+    public static function getFlashMsg(): ?string
     {
-        return $_SESSION['notif'] ?? null;
+        return self::hasFlashMsg() ? $_SESSION['notif'] : null;
     }
 
-    public static function resetFlashMsg(): void
+    public static function resetMsg(): void
     {
-        $_SESSION['notif'] = [];
+        $_SESSION['notif'] = '';
+        $_SESSION['error'] = '';
     }
 }

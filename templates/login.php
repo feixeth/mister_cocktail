@@ -8,7 +8,7 @@
     <?php endif; ?>
     <div class="mb-3">
         <label for="exampleFormControlInput2" class="form-label">Email address</label>
-        <input type="email" name='email' class="form-control" id="exampleFormControlInput2" placeholder="name@example.com">
+        <input type="email" name='email' class="form-control" id="exampleFormControlInput2" placeholder="name@example.com" autofocus>
     </div>
     <div class="mb-3">
         <label for="exampleFormControlInput3" class="form-label">Password</label>

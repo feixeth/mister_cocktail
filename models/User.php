@@ -22,6 +22,7 @@ class User extends DatabaseConnector
     public function __construct()
     {
         parent::__construct();
+        $this->table = 'user';
     }
 
     public function getId(): int
@@ -129,9 +130,12 @@ class User extends DatabaseConnector
         return $this;
     }
 
+    // Generic's Methods
     /**
      * Find One by email
      *
+     * @param string $email
+     * @return void
      */
     public function findByEmail(string $email)
     {
@@ -150,25 +154,22 @@ class User extends DatabaseConnector
         return false;
     }
 
-    /**
-     * Find One by email
-     */
-    public function findByName(string $name)
-    {
-        try {
-            $result = $this->getConnection()->prepare('
-                SELECT id, name, email, password, created_at, role_id
-                FROM user
-                WHERE name = :name
-            ');
-            $result->execute(['name' => $name]);
+    // public function findByName(string $name)
+    // {
+    //     try {
+    //         $result = $this->getConnection()->prepare(
+    //             "SELECT id, name
+    //             FROM {$this->table}
+    //             WHERE name = :name"
+    //         );
+    //         $result->execute(['name' => $name]);
 
-            return $result->fetch();
-        } catch (\PDOException $e) {
-            echo $e->getMessage();
-        }
-        return false;
-    }
+    //         return $result->fetch();
+    //     } catch (PDOException $e) {
+    //         echo $e->getMessage();
+    //     }
+    //     return false;
+    // }
 
     /**
      * Insert User

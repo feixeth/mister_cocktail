@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once 'controllers/HomeController.php';
 require_once 'controllers/AuthController.php';
+require_once 'controllers/DashBoardController.php';
 require_once 'controllers/CocktailController.php';
 
 class Router
@@ -26,6 +27,7 @@ class Router
         $params = $_POST ?? null;
 
         // Dispatch route
+        // #TODO Optimize route in config file
         switch ($route) {
             case 'home':
                 $controller = new HomeController();
@@ -35,33 +37,49 @@ class Router
                 $controller = new CocktailController();
                 $controller->index();
                 break;
-            case 'add_cocktail':
-                // POst exist
+            case 'show':
+                $id = (int) $_GET['id'] ?? null;
                 $controller = new CocktailController();
-                $controller->add($params);
+                $controller->show($id);
+                break;
+            case 'add_cocktail':
+                $file = $_FILES ?? null;
+                $controller = new CocktailController();
+                $controller->add($params, $file);
+                break;
+            case 'edit_cocktail':
+                $id = (int) $_GET['id'] ?? null;
+                $controller = new CocktailController();
+                $controller->edit($id, $params);
+                break;
+            case 'del_cocktail':
+                $id = (int) $_GET['id'] ?? null;
+                $controller = new CocktailController();
+                $controller->del($id);
+                break;
+            case 'dashboard':
+                $controller = new DashBoardController();
+                $controller->index();
+                break;
+            case 'add_alcohol':
+                $controller = new DashBoardController();
+                $controller->addAlcohol($params);
+                break;
+            case 'add_ingredient':
+                $controller = new DashBoardController();
+                $controller->addIngredient($params);
                 break;
             case 'login':
-                // $params = !empty($_POST) && array_key_exists('email', $_POST) && array_key_exists('password', $_POST) ? ['email' => $_POST['email'], 'password' => $_POST['password']] : null;
                 $controller = new AuthController();
                 $controller->login($params);
                 break;
             case 'signin':
-                // $params = !empty($_POST) && array_key_exists('name', $_POST) && array_key_exists('email', $_POST) && array_key_exists('password', $_POST) ? ['name' => $_POST['name'], 'email' => $_POST['email'], 'password' => $_POST['password']] : null;
                 $controller = new AuthController();
                 $controller->signin($params);
                 break;
             case 'logout':
                 $controller = new AuthController();
                 $controller->logout((int) $_GET['user_id']);
-                break;
-            case 'cocktails':
-                $controller = new CocktailController();
-                $controller->index();
-                break;
-            case 'show':
-                $id = (int) $_GET['id'] ?? null;
-                $controller = new CocktailController();
-                $controller->show($id);
                 break;
         }
     }
